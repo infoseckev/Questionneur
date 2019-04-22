@@ -27,7 +27,7 @@
                 socket.emit('question-demander', {
                     user_name: user_name
                 });
-                $('#message-student').append('<p>Vous avez demandé(e) l\'attention de l\'enseignant(e)!</p>');
+                $('#message-student').append('<p>Vous avez demandé l\'attention de l\'enseignant(e)!</p>');
                 setTimeout('$("#question-ask").prop("disabled", false)', 20000);
                 setTimeout(function () {
                     $("#message-student").empty();
