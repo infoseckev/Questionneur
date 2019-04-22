@@ -33,6 +33,7 @@ URL de l'etudiant
 http://localhost:5000
 ```
 
+Lorsq'un etudiant s'inscrit et pese le bouton pour avoir de l'attention, la page du prof va l'indiquer
 ## Acknowledgments
 
 * James Goseling
