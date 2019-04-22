@@ -6,7 +6,58 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
     <script type="text/javascript">
+        function launchFullScreen(element) {
+            if(element.requestFullScreen) {
+                element.requestFullScreen();
+            } else if(element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if(element.webkitRequestFullScreen) {
+                element.webkitRequestFullScreen();
+            }
+        }
+
+        function launchMatix() {
+            document.body.style.overflow = 'hidden';
+            launchFullScreen(document.documentElement); // the whole page
+            $('body').css('margin','0px');
+            $('body').css('padding','0px');
+            var s = window.screen;
+            var width = q.width = s.width;
+            var height = q.height = s.height;
+            var letters = Array(256).join(1).split('');
+
+            var draw = function () {
+                q.getContext('2d').fillStyle='rgba(0,0,0,.05)';
+                q.getContext('2d').fillRect(0,0,width,height);
+                q.getContext('2d').fillStyle='#0F0';
+                letters.map(function(y_pos, index){
+                    text = String.fromCharCode(3e4+Math.random()*33);
+                    x_pos = index * 10;
+                    q.getContext('2d').fillText(text, x_pos, y_pos);
+                    letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
+                });
+            };
+            setInterval(draw, 33);
+        }
+
+        var clicks = 0;
+        function onClick() {
+            clicks += 1;
+            console.log(clicks);
+            if(clicks > 50){
+                $('.container').prop('visibility','hidden');
+                launchMatix();
+            }
+
+        }
+/*
+        $('input').click(function (event) {
+            if ($(this).hasClass('disabled')) {
+                onClick();
+            }
+        });*/
         $('document').ready(function () {
+
 
             var socket = io.connect('http://' + document.domain + ':' + location.port);
             socket.on('connect', function () {
@@ -22,19 +73,29 @@
 
             $('form').on('submit', function (e) {
                 e.preventDefault();
-                $('#question-ask').prop("disabled", true);
+
                 let user_name = $('#username').val();
-                socket.emit('question-demander', {
-                    user_name: user_name
-                });
+                if(!$('#question-ask').hasClass("disabled")){
+                    socket.emit('question-demander', {
+                        user_name: user_name
+                    });
+                }
+
+
+                $('#question-ask').addClass("disabled");
+
+
                 $('#message-student').append('<p>Vous avez demandé l\'attention de l\'enseignant(e)!</p>');
-                setTimeout('$("#question-ask").prop("disabled", false)', 20000);
+                setTimeout('$("#question-ask").removeClass("disabled")', 20000);
                 setTimeout(function () {
                     $("#message-student").empty();
                 }, 20000);
             });
 
             $('#username-submit').on('click', function (e) {
+
+
+
                 $('#welcome').append('Bienvenue ' + $('#username').val());
                 $('section#student-login').css('display', 'none');
                 $('section#ask-question').css('visibility', 'visible');
@@ -44,7 +105,8 @@
     </script>
 </head>
 <body>
-<div>
+<canvas id="q"></canvas>
+<div class="container">
     <section id="student-login" class="aligner">
         <input id="username" type="text" placeholder="Veuillez entrer votre pseudonyme"/>
         <div id="username-submit" class="button">Joindre le cours!</div>
@@ -53,9 +115,13 @@
     <section id="ask-question" class="hidden aligner">
         <span id="welcome"></span>
         <form action="" method="POST">
-            <div>
-                <input type="submit" id="question-ask" class="button question" value="Lever la main!"/>
-            </div>
+<div>
+    <input type="submit" id="question-ask" class="button question" onClick="onClick()"  value="Lever la main!"/>
+
+
+
+</div>
+
         </form>
         <div id="message-student"></div>
     </section>
