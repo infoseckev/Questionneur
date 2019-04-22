@@ -1,0 +1,125 @@
+body {
+    padding: 2em;
+    background-color: blue;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 0px 16px 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 100%;
+    font-size: 2em;
+    border-radius: 6px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #006400;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(2px);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#content-holder {
+    padding-top: 170px;
+    font-size: 55px;
+    color: white;
+}
+
+.aligner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+}
+
+.fit-size {
+    width: 100%;
+    font-size: 4em;
+}
+
+::placeholder {
+    color: darkblue;
+    font-size: 22px;
+}
+
+#student-login {
+    min-width: 500px;
+}
+
+#username-submit {
+    margin-top: 20px;
+}
+
+#username {
+    font-size: 22px;
+}
+
+#welcome {
+    font-size: 36px;
+}
+
+input[type="text"] {
+    padding: 16px 0px 16px 0px;
+    margin: 0;
+    line-height: 28px;
+    width: 100%;
+    font-size: 22px;
+}
+
+.question {
+    padding: 16px 10px !important;
+}
+
+div.bouncing-ball {
+    border-radius: 60px;
+
+    animation: bounce 0.5s;
+    animation-direction: alternate;
+    animation-timing-function: cubic-bezier(.5, 0.05, 1, .5);
+    animation-iteration-count: 100;
+}
+
+@keyframes bounce {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(0, 200px, 0);
+    }
+}
+
+.question-mark {
+    animation: rotating 4s linear 0s infinite;
+    background: green;
+    border-radius: 60px;
+    color: white;
+    height: 120px;
+    line-height: 120px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 6em;
+    width: 120px;
+}
+
+@keyframes rotating {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+

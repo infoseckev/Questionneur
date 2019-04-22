@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Questionneur</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script type="text/javascript">
+        $('document').ready(function () {
+
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            socket.on('connect', function () {
+                socket.emit('question-init', {
+                    data: 'User Connected'
+                });
+            });
+            socket.on('question-retour', function (msg) {
+                if (typeof msg.user_name !== 'undefined') {
+                    $('div.message_holder').append('<div><b>' + msg.user_name + '</b> a une question!</div>');
+                }
+            });
+
+            $('form').on('submit', function (e) {
+                e.preventDefault();
+                $('#question-ask').prop("disabled", true);
+                let user_name = $('#username').val();
+                socket.emit('question-demander', {
+                    user_name: user_name
+                });
+                $('#message-student').append('<p>Vous avez demandé(e) l\'attention de l\'enseignant(e)!</p>');
+                setTimeout('$("#question-ask").prop("disabled", false)', 20000);
+                setTimeout(function () {
+                    $("#message-student").empty();
+                }, 20000);
+            });
+
+            $('#username-submit').on('click', function (e) {
+                $('#welcome').append('Bienvenue ' + $('#username').val());
+                $('section#student-login').css('display', 'none');
+                $('section#ask-question').css('visibility', 'visible');
+
+            });
+        });
+    </script>
+</head>
+<body>
+<div>
+    <section id="student-login" class="aligner">
+        <input id="username" type="text" placeholder="Veuillez entrer votre pseudonyme"/>
+        <div id="username-submit" class="button">Joindre le cours!</div>
+    </section>
+
+    <section id="ask-question" class="hidden aligner">
+        <span id="welcome"></span>
+        <form action="" method="POST">
+            <div>
+                <input type="submit" id="question-ask" class="button question" value="Lever la main!"/>
+            </div>
+        </form>
+        <div id="message-student"></div>
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Questionneur</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        $('button').click(function() {
+            $('.bubble').addClass('animate');
+        })
+        socket.on('question-retour', function (msg) {
+            if (typeof msg.user_name !== 'undefined') {
+                $('#content-holder').fadeIn(5000);
+                $('#content-holder').append('<a>' + msg.user_name + ' demande votre attention!</a><br/>');
+
+                $("#result").addClass('bouncing-ball').delay(30000);
+                $('p').css('background-color','red');
+                setTimeout(function() {
+                    $("#result").removeClass("bouncing-ball");
+                    $('p').css('background-color', 'green');
+                    $('#content-holder').fadeOut(5000);
+                    $('#content-holder').empty();
+                },30000);
+            }
+        });
+    </script>
+</head>
+<body>
+<div class="aligner">
+    <div class="Aligner-item" >
+        <div id="result" class="" >
+            <p class="question-mark">?</p>
+        </div>
+        <div id="content-holder"></div>
+    </div>
+</div>
+</body>
+</html>
+
